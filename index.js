@@ -106,7 +106,7 @@ function create (dir) {
     return stream
   }
 
-  function add (key, cb) {
+  function add (key, data, cb) {
     key = datKeyAs.buf(key)
     that.emit('add', key)
 
@@ -114,7 +114,9 @@ function create (dir) {
     keys.get(hex, function (err) {
       if (!err) return cb()
       keys.put(hex, key, cb)
-      append({type: 'add', key: key.toString('hex')})
+      var toAppend = {type: 'add', key: key.toString('hex')}
+      if (data) toAppend.data = data
+      append(toAppend)
     })
   }
 
